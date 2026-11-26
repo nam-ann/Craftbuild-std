@@ -108,32 +108,32 @@ export namespace craftbuild {
 
         auto clear() -> void;
 
-        static u32 column_seed(i32 seed, i32 x, i32 z);
-        static f32 smoothstep(f32 value);
-        static Biome lerp_biome(Biome const& a, Biome const& b, f32 t);
-        static Biome select_biome_at(i32 wx, i32 wz, Ref<FastNoiseLite> noise, usize biome_count);
-        static Biome get_blended_biome(i32 wx, i32 wz, Ref<FastNoiseLite> noise, usize biome_count);
+        static auto column_seed(i32 seed, i32 x, i32 z) -> u32;
+        static auto smoothstep(f32 value) -> f32;
+        static auto lerp_biome(Biome const& a, Biome const& b, f32 t) -> Biome;
+        static auto select_biome_at(i32 wx, i32 wz, Ref<FastNoiseLite> noise, usize biome_count) -> Biome;
+        static auto get_blended_biome(i32 wx, i32 wz, Ref<FastNoiseLite> noise, usize biome_count) -> Biome;
 
-        void set_block(Pos3D<u8> const& pos, std::string_view block);
-        void set_block(Pos3D<u8> const& pos, u32 block_id);
+        auto set_block(Pos3D<u8> const& pos, std::string_view block) -> void;
+        auto set_block(Pos3D<u8> const& pos, u32 block_id) -> void;
 
-        void tag_block(Pos3D<u8> const& pos, std::string_view tag);
-        void tag_block(Pos3D<u8> const& pos, u32 tag_id);
+        auto tag_block(Pos3D<u8> const& pos, std::string_view tag) -> void;
+        auto tag_block(Pos3D<u8> const& pos, u32 tag_id) -> void;
 
-        void set_block_metadata(Pos3D<u8> const& pos, std::string_view meta, std::string_view meta_data = "");
-        void set_block_metadata(Pos3D<u8> const& pos, u32 meta_id, std::string_view meta_data = "");
+        auto set_block_metadata(Pos3D<u8> const& pos, std::string_view meta, std::string_view meta_data = "") -> void;
+        auto set_block_metadata(Pos3D<u8> const& pos, u32 meta_id, std::string_view meta_data = "") -> void;
 
-        bool has_tag(Pos3D<u8> const& pos, std::string_view tag) const;
-        bool has_tag(Pos3D<u8> const& pos, u32 tag_id) const;
+        auto has_tag(Pos3D<u8> const& pos, std::string_view tag) const -> bool;
+        auto has_tag(Pos3D<u8> const& pos, u32 tag_id) const -> bool;
 
-        bool has_metadata(Pos3D<u8> const& pos, std::string_view meta, std::string_view meta_data = "") const;
-        bool has_metadata(Pos3D<u8> const& pos, u32 meta_id, std::string_view meta_data = "") const;
+        auto has_metadata(Pos3D<u8> const& pos, std::string_view meta, std::string_view meta_data = "") const -> bool;
+        auto has_metadata(Pos3D<u8> const& pos, u32 meta_id, std::string_view meta_data = "") const -> bool;
 
-        u32 get_block(Pos3D<u8> const& pos) const;
-        std::unordered_set<u32> const* get_tag(Pos3D<u8> const& pos) const;
-        std::unordered_map<u32, std::string> const* get_metadata(Pos3D<u8> const& pos) const;
+        auto get_block(Pos3D<u8> const& pos) const -> u32;
+        auto get_tag(Pos3D<u8> const& pos) const -> std::unordered_set<u32> const*;
+        auto get_metadata(Pos3D<u8> const& pos) const -> std::unordered_map<u32, std::string> const*;
 
-        void generate_terrain(i32 seed, Ref<FastNoiseLite> noise);
-        void generate_mesh(ChunkRender& mesh, std::array<std::shared_ptr<Chunk>, 4> neighbors);
+        auto generate_terrain(i32 seed, Ref<FastNoiseLite> noise) -> void;
+        auto generate_mesh(ChunkRender& mesh, std::array<std::shared_ptr<Chunk>, 4> neighbors) -> void;
     };
 }

@@ -554,8 +554,9 @@ namespace craftbuild {
 
                                     auto& value = meta_storages[key];
 
-                                    auto data_size = u64(value.size());
+                                    auto data_size = 0uqw;
                                     is.read(reinterpret_cast<char*>(&data_size), sizeof data_size);
+                                    value.resize(data_size);
                                     is.read(reinterpret_cast<char*>(value.data()), data_size);
                                 }
                             }

@@ -35,7 +35,7 @@ namespace craftbuild {
     }
 
     static inline auto get_info(LOC_PARAM) {
-        return "({} | {}):{} "f(thread_registry::get_name(std::this_thread::get_id()), get_file_name(__loc__.file_name()), __loc__.line());
+        return "({} | {}:{}) "f(thread_registry::get_name(std::this_thread::get_id()), get_file_name(__loc__.file_name()), __loc__.line());
     }
 
     auto LogQueue::store(std::string_view log, std::string_view file_log) -> void {

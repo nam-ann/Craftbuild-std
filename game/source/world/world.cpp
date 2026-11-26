@@ -258,7 +258,7 @@ namespace craftbuild {
                 for (auto const& [key, value] : meta_storages) {
                     os.write(reinterpret_cast<char const*>(&key), sizeof key);
 
-                    u64 data_size = value.size();
+                    auto const data_size = u64(value.size());
                     os.write(reinterpret_cast<char const*>(&data_size), sizeof data_size);
                     os.write(reinterpret_cast<char const*>(value.data()), data_size);
                 }
@@ -557,7 +557,7 @@ namespace craftbuild {
     }
 
     auto World::save_region(std::string_view path, i32 rx, i32 ry) -> void{
-        auto const real_path = ProjectSettings::get_singleton()->globalize_path(to_gstring("{}/regions/{}_{}/.cbregion"f(path, rx, ry)));
+        auto const real_path = ProjectSettings::get_singleton()->globalize_path(to_gstring("{}/regions/{}_{}.cbregion"f(path, rx, ry)));
         auto const std_path = std::string(real_path.utf8());
 
         std::filesystem::create_directories(std::filesystem::path(std_path).parent_path());
@@ -605,7 +605,7 @@ namespace craftbuild {
                     auto const meta_storages_size = u64(meta_storages.size());
                     ofs.write(reinterpret_cast<char const*>(&meta_storages_size), sizeof meta_storages_size);
                     for (auto const& [key, value] : meta_storages) {
-                        ofs.write(reinterpret_cast<char const*>(&key), sizeof(u32));
+                        ofs.write(reinterpret_cast<char const*>(&key), sizeof key);
 
                         auto const data_size = u64(value.size());
                         ofs.write(reinterpret_cast<char const*>(&data_size), sizeof data_size);
@@ -694,8 +694,9 @@ namespace craftbuild {
 
                         auto& value = meta_storages[key];
 
-                        auto data_size = u64(value.size());
+                        auto data_size = 0uqw;
                         ifs.read(reinterpret_cast<char*>(&data_size), sizeof data_size);
+                        value.resize(data_size);
                         ifs.read(reinterpret_cast<char*>(value.data()), data_size);
                     }
                 }

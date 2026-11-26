@@ -169,7 +169,7 @@ namespace craftbuild {
     }
     auto Chunk::has_tag(Pos3D<u8> const& pos, u32 tag_id) const -> bool {
         auto const lock = std::shared_lock(data_mutex);
-        auto const valid = pos.x >= WIDTH or pos.y >= HEIGHT or pos.z >= WIDTH;
+        auto const valid = pos.x < WIDTH and pos.y < HEIGHT and pos.z < WIDTH;
 
         return valid and tag_ids.contains(pos) and tag_ids.at(pos).contains(tag_id);
     }
@@ -210,7 +210,7 @@ namespace craftbuild {
         auto const BEDROCK = block_registry::get_id("Bedrock");
         auto const CHEESE_CAVE = cave_registry::get_cave(cave_registry::get_id("Large Cavern"));
 
-        auto new_block_ids = std::array<u8, 256>{};
+        auto new_block_ids = std::array<u32, 256>{};
         auto new_block_ids_size = 0ub;
 
         auto new_id2block = std::unordered_map<u32, u8>();
@@ -316,8 +316,8 @@ namespace craftbuild {
 
         {
             auto lock = std::unique_lock(data_mutex);
-            std::memcpy(blocks.data(), new_blocks.data(), sizeof new_blocks);
-            std::memcpy(block_ids.data(), new_block_ids.data(), sizeof new_block_ids);
+            blocks.swap(new_blocks);
+            block_ids.swap(new_block_ids);
 
             block_ids_size = new_block_ids_size;
             id2block.swap(new_id2block);
@@ -413,7 +413,6 @@ namespace craftbuild {
         auto mask = std::vector<FaceMask>{};
         mask.resize(Chunk::HEIGHT * Chunk::WIDTH);
 
-        auto vertex_offsets = std::array<u8, 4>{};
         for (auto d : std::views::iota(0, 3)) {
             auto const u = (d + 1) % 3;
             auto const v = (d + 2) % 3;
@@ -485,7 +484,7 @@ namespace craftbuild {
                         auto const s_idx = get_submesh_index(avg_y);
 
                         auto& data = chunk_data[s_idx];
-                        auto& vertex_offset = vertex_offsets[s_idx];
+                        auto vertex_offset = data.vertices.size();
 
                         auto const p0 = Pos3D(start[0], start[1], start[2]);
                         auto const p1 = Pos3D(start[0] + du[0], start[1] + du[1], start[2] + du[2]);
@@ -549,8 +548,6 @@ namespace craftbuild {
                         collision_faces.push_back(vertices[vertex_offset + 0]);
                         collision_faces.push_back(vertices[vertex_offset + 3]);
                         collision_faces.push_back(vertices[vertex_offset + 2]);
-
-                        vertex_offset += 4;
 
                         for (auto v_idx : std::views::iota(0, height))
                             for (auto u_idx : std::views::iota(0, width))
