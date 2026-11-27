@@ -945,29 +945,30 @@ namespace craftbuild {
         return true;
     }
 
-    void Main::pause() {
+    auto Main::pause() -> void {
         auto input = Input::get_singleton();
         input->set_mouse_mode(Input::MOUSE_MODE_VISIBLE);
         pausing.store(true, std::memory_order::relaxed);
     }
-    void Main::resume() {
+    auto Main::resume() -> void {
         auto input = Input::get_singleton();
         input->set_mouse_mode(Input::MOUSE_MODE_CAPTURED);
         pausing.store(false, std::memory_order::relaxed);
     }
 
-    void Main::start_chat() {
-        Input* input = Input::get_singleton();
+    auto Main::start_chat() -> void {
+        auto input = Input::get_singleton();
         input->set_mouse_mode(Input::MOUSE_MODE_VISIBLE);
         chatting.store(true, std::memory_order::relaxed);
     }
 
-    void Main::chat(String const msg) {
+    auto Main::chat(String const msg) -> void {
         if (not server_ptr) send_queue.store({ "Chat", { std::string(msg.utf8()) } });
         else {
             auto const output = server_ptr->chat(std::string(msg.utf8()));
 			emit_signal("chat_output", to_gstring(output));
         }
+
         auto input = Input::get_singleton();
         input->set_mouse_mode(Input::MOUSE_MODE_CAPTURED);
         chatting.store(false, std::memory_order::relaxed);
@@ -985,6 +986,8 @@ namespace craftbuild {
     void Main::set_render_distance(i32 rd) {
         if (not server_ptr) send_queue.store({ "std::unordered_set render distance", { std::to_string(rd) } });
         else server_ptr->set_render_distance(rd);
+
+        if (auto sky = get_node<CraftSky>("CraftSky")) sky->reset_fog_distance();
     }
 
     void Main::set_cpu_sleep_time(i32 stc) {

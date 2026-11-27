@@ -17,19 +17,6 @@ import game.core;
 using namespace godot;
 
 export namespace craftbuild {
-    class Sun final : public DirectionalLight3D {
-        GDCLASS(Sun, DirectionalLight3D)
-
-        f32 day_angle = -0.8f;
-        f32 day_speed = 0.0005f;
-
-    public:
-        auto _ready() -> void override;
-        auto _process(f64 delta) -> void override;
-
-        static auto _bind_methods() -> void {};
-    };
-
     class CraftSky final : public WorldEnvironment {
         GDCLASS(CraftSky, WorldEnvironment)
 
@@ -38,6 +25,29 @@ export namespace craftbuild {
 
     public:
         auto _ready() -> void override;
+
+        auto set_time_of_day(f32 sun_height) -> void;
+        auto reset_fog_distance() -> void;
+
+        static auto _bind_methods() -> void {};
+    };
+
+    class Sun final : public DirectionalLight3D {
+        GDCLASS(Sun, DirectionalLight3D)
+
+        f32 day_angle = -0.8f;
+        f32 day_speed = 0.0005f;
+        f32 applied_angle = -1.0f;
+
+        CraftSky* craft_sky = nullptr;
+
+        auto apply_time() -> void;
+
+    public:
+        auto _ready() -> void override;
+        auto _process(f64 delta) -> void override;
+
+        auto bind_sky(CraftSky* sky) -> void;
 
         static auto _bind_methods() -> void {};
     };
