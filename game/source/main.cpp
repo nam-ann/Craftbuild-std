@@ -1002,8 +1002,8 @@ namespace craftbuild {
     void Main::_bind_methods() {
         ADD_SIGNAL(MethodInfo("chat_output", PropertyInfo(Variant::STRING, "line")));
         ClassDB::bind_method(D_METHOD("init"), &Main::_ready);
-        ClassDB::bind_method(D_METHOD("singleplayer"), &Main::init_singleplayer);
-        ClassDB::bind_method(D_METHOD("multiplayer"), &Main::init_multiplayer);
+        ClassDB::bind_method(D_METHOD("init_singleplayer"), &Main::init_singleplayer);
+        ClassDB::bind_method(D_METHOD("init_multiplayer"), &Main::init_multiplayer);
         ClassDB::bind_method(D_METHOD("process"), &Main::_process);
         ClassDB::bind_method(D_METHOD("pause_game"), &Main::pause);
         ClassDB::bind_method(D_METHOD("resume_game"), &Main::resume);
