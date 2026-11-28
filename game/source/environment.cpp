@@ -24,8 +24,8 @@ namespace craftbuild {
     static constexpr auto BG_ENERGY = 1.0f;
 
     static constexpr auto SHADOW_DISTANCE = 292.0f;
-    static constexpr auto FOG_BEGIN_RATIO = 1.65f;
-    static constexpr auto FOG_END_RATIO = 4.95f;
+    static constexpr auto FOG_BEGIN_RATIO = 8.65f;
+    static constexpr auto FOG_END_RATIO = 16.95f;
 
     auto CraftSky::_ready() -> void {
         sky_material.instantiate();
